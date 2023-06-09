@@ -1,0 +1,69 @@
+spring:
+  # 数据库配置
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    # MySQL配置
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/word?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2b8&allowMultiQueries=true&rewriteBatchedStatements=true
+    username: root
+    password: root
+    # Druid
+    druid:
+      # 初始化大小，最大数据库连接数,最小空闲连接数
+      initial-size: 10
+      max-active: 100
+      min-idle: 5
+      # 配置获取连接等待超时的时间
+      max-wait: 60000
+      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位毫秒
+      time-between-eviction-runs-millis: 60000
+      # 配置一个连接在池中最小生存时间
+      min-evictable-idle-time-millis: 100000
+  jackson:
+    time-zone: GMT+8
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+  #设置邮箱
+  mail:
+    host: smtp.qq.com    #邮箱服务器地址
+    username: #邮箱账号
+    password: #邮箱授权码
+    default-encoding: utf-8    #默认编码
+
+  redis:
+    host: # 地址
+    port: 6379
+    database: 0
+    connect-timeout: 3000ms   #最大等待时间，超时则抛出异常，否则请求一直等待
+    lettuce:
+      pool:
+        max-active: 100    #最大连接数，负值表示没有限制，默认8
+        max-wait: -1    #最大阻塞等待时间，负值表示没限制，默认-1
+        max-idle: 20   #最大空闲连接，默认8
+        min-idle: 5   #最小空闲连接，默认0
+      shutdown-timeout: 100
+  freemarker:
+    suffix: .html
+    cache: false
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+      enabled: true
+
+# mybatis-plus 配置
+mybatis-plus:
+  #  configuration:
+  #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl	#开启日志
+  mapper-locations: classpath:mapper/*.xml
+
+#七牛云，imageUrl为域名
+qiniu:
+  accessKey: # AK
+  accessSecretKey: # SK
+  bucket: # 空间
+  prefix: # 文件名路径前缀，用于过滤，默认为空
+  domain: # 域名

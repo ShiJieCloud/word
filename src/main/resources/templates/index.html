@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-cn" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+     <meta name="author" content="Jie"><!-- Site Title -->
+    <link rel="shortcut icon" href="/static/image/logo_world_32x32.png" type="image/x-icon">
+    <title>美言每句</title><!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css"><!-- Material Icon -->
+    <link rel="stylesheet" href="/static/css/materialdesignicons.min.css"><!-- Magnific Popup -->
+    <link rel="stylesheet" href="/static/css/magnific-popup.css"><!-- Carousel Slider -->
+    <link rel="stylesheet" href="/static/css/owl.carousel.css"><!-- Google Fonts -->
+    <link href="/static/css/css.css" rel="stylesheet"><!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body><!-- Start Preloader -->
+    <div class="spinner-wrapper">
+        <div class="spinner">
+            <div class="bounce1"></div>
+            <div class="bounce2"></div>
+            <div class="bounce3"></div>
+        </div>
+    </div><!-- End preloader -->
+    <div id="main-wrapper"><!-- Start Navbar -->
+        <section class="home-bg section active" id="home" th:style="'background-image:url('+${imgUrl}+')'">
+            <div id="particles-js"></div>
+            <div class="section-area">
+                <div class="section-content">
+                    <div class="hero-text-area">
+                        <div class="welcome-area">
+                            <div class="container">
+                                <div class="row align-items-center">
+                                    <div class="col-md-12">
+                                        <div class="hero-text text-center">
+                                            <div id="word-content" class="wel-txt aa" style="font-weight: bold" th:text="${word.getWord().content}">Hello</div>
+                                        </div>
+                                        <ul id="word-tags" class="informative-txt d-flex justify-content-center align-items-center">
+                                            <li th:each="tag,index:${word.getTags()}"><span th:text="${tag.name}"></span><i th:if="${!index.last}" class="mdi mdi-circle mdi-10px ml-3 mr-3"></i></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section><!-- End Home --><!-- Start About-Us -->
+    </div><!-- Javascript -->
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/popper.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/jquery.easing.min.js"></script>
+    <script src="/static/js/jquery.waypoints.min.js"></script>
+    <script src="/static/js/owl.carousel.min.js"></script>
+    <script src="/static/js/jquery.counterup.js"></script>
+    <script src="/static/js/isotope.pkgd.min.js"></script>
+    <script src="/static/js/jquery.magnific-popup.min.js"></script>
+    <script src="/static/js/particles.js"></script>
+    <script src="/static/js/main.js"></script>
+<script>
+    $(document).ready(function(){
+
+       let word_content =  $('#word-content');
+       let word_tags =  $('#word-tags');
+
+        setInterval(function () {
+            $.ajax({
+                type: 'GET',
+                url: '/api/word/random',
+                dataType: 'json',
+                success: function (data) {
+                    let code = data.code;
+                    let word = data.data.word;
+                    let tags = data.data.tags;
+                    if(code==200){
+                        word_content.text(word.content);
+                        let tag_html = "";
+                        for (let i = 0; i < tags.length; i++) {
+                            tag_html+="<li>"+tags[i].name+"</li>";
+                            if((i+1)!=tags.length){
+                                tag_html+="<li><i class=\"mdi mdi-circle mdi-10px ml-3 mr-3\"></i></li>";
+                            }
+                        }
+                        word_tags.html(tag_html);
+                    }
+                }
+            });
+        }, 10000);
+        setInterval(function () {
+            $.ajax({
+                type: 'GET',
+                url: '/api/image/random',
+                dataType: 'json',
+                success: function (data) {
+                    let code = data.code;
+                    let url = data.data;
+                    if(code==200){
+                        $("#home").attr("style","background-image:url("+url+")");
+                    }
+                }
+            });
+        }, 15000);
+    });
+
+</script>
+</body>
+
+</html>
